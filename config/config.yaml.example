@@ -1,0 +1,78 @@
+# Pipeline Configuration
+pipeline:
+  # Source table configuration
+  source:
+    table_name: "your_table_name"
+    # Columns to extract
+    columns:
+      - id
+      - text_content
+      - metadata_field1
+      - metadata_field2
+      - updated_at
+    # Column to use for incremental extraction (e.g., timestamp column)
+    watermark_column: "updated_at"
+    # Initial watermark value (leave empty for full extraction)
+    initial_watermark: null
+
+  # Embedding configuration
+  embedding:
+    # Field to embed
+    text_field: "text_content"
+    # Embedding model settings
+    model: "text-embedding-ada-002"
+    # Max tokens per chunk (for text-embedding-ada-002, max is 8191)
+    max_tokens: 8000
+    # Batch size for API calls
+    batch_size: 100
+    # Chunk size for long documents (characters)
+    chunk_size: 2000
+    chunk_overlap: 200
+
+  # Azure AI Search index configuration
+  search_index:
+    # Fields to include in the index
+    fields:
+      - name: "id"
+        type: "Edm.String"
+        key: true
+        searchable: false
+        filterable: true
+      - name: "content"
+        type: "Edm.String"
+        searchable: true
+        filterable: false
+      - name: "embedding"
+        type: "Collection(Edm.Single)"
+        searchable: true
+        vector_search: true
+        dimensions: 1536  # For text-embedding-ada-002
+      - name: "metadata"
+        type: "Edm.ComplexType"
+        searchable: false
+        filterable: true
+      - name: "last_updated"
+        type: "Edm.DateTimeOffset"
+        filterable: true
+        sortable: true
+
+    # Vector search configuration
+    vector_search:
+      algorithm: "hnsw"
+      metric: "cosine"
+
+  # Execution settings
+  execution:
+    # Enable incremental mode (only process new/updated records)
+    incremental: true
+    # Checkpoint file location
+    checkpoint_file: ".checkpoint.json"
+    # Error handling
+    max_retries: 3
+    retry_delay_seconds: 5
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "json"
+  output: "console"

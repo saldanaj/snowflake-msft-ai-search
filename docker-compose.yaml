@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: snowflake-ai-pipeline
+    env_file:
+      - config/.env
+    environment:
+      # Override specific environment variables if needed
+      - LOG_LEVEL=INFO
+      - BATCH_SIZE=100
+    volumes:
+      # Mount config for easy updates during development
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      # Mount checkpoint directory for persistence
+      - ./data:/app/data
+    command: python scripts/run_pipeline.py --incremental --json-logs
+    restart: unless-stopped
+
+  # Optional: One-time full pipeline execution
+  pipeline-full:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: snowflake-ai-pipeline-full
+    env_file:
+      - config/.env
+    environment:
+      - LOG_LEVEL=INFO
+      - BATCH_SIZE=100
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./data:/app/data
+    command: python scripts/run_pipeline.py --full --json-logs
+    profiles:
+      - full-run
+
+volumes:
+  data:
+    driver: local

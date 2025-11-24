@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests
+tests/
+pytest.ini
+.pytest_cache/
+.coverage
+
+# Environment files (should be injected at runtime)
+.env
+config/config.yaml
+config/.env
+
+# Logs
+*.log
+logs/
+
+# Checkpoints (should be on persistent volume)
+.checkpoint.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Infrastructure
+infrastructure/
+
+# Scripts (keep only what's needed)
+scripts/*.sh
+scripts/*.ps1
