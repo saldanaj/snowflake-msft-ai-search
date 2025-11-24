@@ -63,3 +63,10 @@ htmlcov/
 # Temporary files
 *.tmp
 *.bak
+
+# Runtime files
+.checkpoint.json
+checkpoint.json
+
+# Claude Code local settings
+.claude/settings.local.json

@@ -167,15 +167,18 @@ class Pipeline:
             # Step 4: Index documents
             self.logger.info("Step 4: Indexing documents in Azure AI Search")
 
-            # Prepare metadata columns (all columns except text and embedding)
+            # Determine ID column (use first column from config or fallback to first column in dataframe)
+            id_column = columns[0] if columns else df.columns[0]
+
+            # Prepare metadata columns (all columns except text, embedding, and id)
             metadata_columns = [
                 col for col in df.columns
-                if col not in [text_field, "embedding", "id"]
+                if col not in [text_field, "embedding", id_column]
             ]
 
             self.indexer.index_dataframe(
                 df=df,
-                id_column="id",
+                id_column=id_column,
                 content_column=text_field,
                 embedding_column="embedding",
                 metadata_columns=metadata_columns,

@@ -2,13 +2,21 @@
 pipeline:
   # Source table configuration
   source:
-    table_name: "your_table_name"
+    table_name: "PATIENT_CLINICAL_NOTES"
     # Columns to extract
     columns:
-      - id
-      - text_content
-      - metadata_field1
-      - metadata_field2
+      - note_id
+      - patient_name
+      - patient_age
+      - patient_gender
+      - encounter_date
+      - encounter_type
+      - diagnosis_summary
+      - icd10_codes
+      - medications_prescribed
+      - full_clinical_note
+      - provider_name
+      - department
       - updated_at
     # Column to use for incremental extraction (e.g., timestamp column)
     watermark_column: "updated_at"
@@ -17,8 +25,8 @@ pipeline:
 
   # Embedding configuration
   embedding:
-    # Field to embed
-    text_field: "text_content"
+    # Field to embed (the complete clinical note)
+    text_field: "full_clinical_note"
     # Embedding model settings
     model: "text-embedding-ada-002"
     # Max tokens per chunk (for text-embedding-ada-002, max is 8191)
